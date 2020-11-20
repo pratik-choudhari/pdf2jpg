@@ -4,12 +4,14 @@ from tqdm import tqdm
 
 
 def compress_images(og_imgs: list, params: dict):
+    print("Saving images...")
     for i in tqdm(range(len(og_imgs))):
         try:
             og_imgs[i].save(fp=f"data/images/{i}.jpg", optimize=True, quality=params['quality'])
         except Exception as e:
             print(f"error saving file: {e}")
             return False
+    print("Successfully saved")
     return True
 
 
@@ -28,19 +30,21 @@ class CNC:
         3=>PDF read but no images
         """
         try:
+            print("Reading file...")
             images = convert_from_path(self.PDF_PATH, poppler_path=self.POPPLER_PATH)
         except (PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError):
             return 1
         except PDFPopplerTimeoutError:
             return 2
         if images:
-            print(f"Total {len(images)} images in pdf")
+            print(f"Total {len(images)} images from {len(images)} pages in pdf")
             return images
         else:
             return 3
 
 
 if __name__ == '__main__':
-    cnc = CNC('data/pdfs/gre_aidi_fellowships.pdf', r"C:\Users\pratik\Documents\poppler-20.11.0\bin")
-    images = cnc.get_images()
-    compress_images(images, {"quality": 90})
+    pass
+    # cnc = CNC('data/pdfs/gre_aidi_fellowships.pdf', r"C:\Users\pratik\Documents\poppler-20.11.0\bin")
+    # images = cnc.get_images()
+    # compress_images(images, {"quality": 90})
