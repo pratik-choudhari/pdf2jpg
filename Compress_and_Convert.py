@@ -1,10 +1,20 @@
 from pdf2image import convert_from_path
 from pdf2image.exceptions import PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError, PDFPopplerTimeoutError
 from tqdm import tqdm
+import os
 
 
 def compress_images(og_imgs: list, params: dict):
-    print("Saving images...")
+    if type(og_imgs) == int:
+        print("Error reading file or quality factor out of bounds")
+        return False
+    elif not (0 < params['quality'] < 101):
+        print("Quality factor out of bounds")
+        return False
+    else:
+        print("Saving images...")
+    if not os.path.isdir("data/images"):
+        os.mkdir("data/images")
     for i in tqdm(range(len(og_imgs))):
         try:
             og_imgs[i].save(fp=f"data/images/{i}.jpg", optimize=True, quality=params['quality'])
