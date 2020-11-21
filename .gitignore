@@ -1,2 +1,3 @@
 .idea/*
-data/*
+data/images/*
+__pycache__/*
