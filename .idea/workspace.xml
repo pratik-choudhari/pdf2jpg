@@ -121,6 +121,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="219" y="80" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1605851876793">
