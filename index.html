@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PDF2IMAGE Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <script>
+        document.body.className = 'fade';
+    </script>
+    <p id="heading"><b>Hi! Welcome to PDF2IMAGE Converter</b></p>
+    <p id="desc">This is a utility tool for converting PDF pages into image and can also compress them</p><br>
+
+    <form>
+        <p>Select PDF file:</p><br>
+        <input type="file" name=".pdf"><br>
+        <p>Select quality factor:</p><br>
+        <input type="range" min="1" max="100" value="95" class="slider" id="myRange">
+        <p>Value: <span id="demo"></span></p>
+        <button class="button">Submit</button>
+    </form>
+
+    <a target="_blank" href="https://github.com/pratik-choudhari" class="fa fa-github"></a>
+    <a target="_blank" href="https://www.linkedin.com/in/pratik-choudhari/" class="fa fa-linkedin"></a>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function(e) {
+        document.body.className = '';
+    });
+</script>
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+</script>
+
+</html>
