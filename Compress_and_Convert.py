@@ -2,7 +2,9 @@ from pdf2image import convert_from_path
 from pdf2image.exceptions import PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError, PDFPopplerTimeoutError
 from tqdm import tqdm
 import os
-
+from requests import get
+from zipfile import ZipFile
+import sys
 
 def compress_images(og_imgs: list, params: dict):
     if type(og_imgs) == int:
@@ -25,10 +27,34 @@ def compress_images(og_imgs: list, params: dict):
     return True
 
 
+def setup_poppler():
+    try:
+        print('Downloading...')
+        resp = get(r"https://github.com/oschwartz10612/poppler-windows/releases/download/v20.11.0/Release-20.11.0.zip")
+
+        with open("poppler.zip", "wb") as f:
+            f.write(resp.content)
+
+        print('Extracting...')
+        with ZipFile("poppler.zip", "r") as zp:
+            zp.extractall()
+    except Exception as e:
+        return False
+    else:
+        print("Poppler set up successful")
+        return True
+
+
 class CNC:
     def __init__(self, pdf_path: str, poppler_path: str):
         self.PDF_PATH = pdf_path
         self.POPPLER_PATH = poppler_path
+        if not os.path.isdir(self.POPPLER_PATH):
+            print("Poppler not found, installing now")
+            if not setup_poppler():
+                print("error is setting up poppler")
+                sys.exit()
+
 
     def get_images(self):
         """
@@ -40,7 +66,7 @@ class CNC:
         3=>PDF read but no images
         """
         try:
-            print("Reading file...")
+            print("Reading pdf file...")
             images = convert_from_path(self.PDF_PATH, poppler_path=self.POPPLER_PATH)
         except (PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError):
             return 1
