@@ -1,10 +1,13 @@
-from pdf2image import convert_from_path
-from pdf2image.exceptions import PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError, PDFPopplerTimeoutError
-from tqdm import tqdm
-import os
+from os import listdir
+from os.path import isfile, join, isdir
+import sys
 from requests import get
 from zipfile import ZipFile
-import sys
+from tqdm import tqdm
+from PIL import Image
+from pdf2image import convert_from_path
+from pdf2image.exceptions import PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError, PDFPopplerTimeoutError
+
 
 def compress_images(og_imgs: list, params: dict):
     if type(og_imgs) == int:
@@ -46,15 +49,14 @@ def setup_poppler():
 
 
 class CNC:
-    def __init__(self, pdf_path: str, poppler_path: str):
-        self.PDF_PATH = pdf_path
+    def __init__(self, path: str, poppler_path: str):
+        self.FILE_PATH = path
         self.POPPLER_PATH = poppler_path
-        if not os.path.isdir(self.POPPLER_PATH):
+        if not isdir(self.POPPLER_PATH):
             print("Poppler not found, installing now")
             if not setup_poppler():
                 print("error is setting up poppler")
                 sys.exit()
-
 
     def get_images(self):
         """
@@ -67,7 +69,7 @@ class CNC:
         """
         try:
             print("Reading pdf file...")
-            images = convert_from_path(self.PDF_PATH, poppler_path=self.POPPLER_PATH)
+            images = convert_from_path(self.FILE_PATH, poppler_path=self.POPPLER_PATH)
         except (PDFSyntaxError, PDFInfoNotInstalledError, PDFPageCountError):
             return 1
         except PDFPopplerTimeoutError:
@@ -77,6 +79,27 @@ class CNC:
             return images
         else:
             return 3
+
+    def to_pdf(self):
+        try:
+            img_paths = [join(self.FILE_PATH, f) for f in listdir(self.FILE_PATH)
+                         if
+                         (isfile(join(self.FILE_PATH, f)) and (f.endswith(".png") or f.endswith(".jpg") or f.endswith(".jpeg")))]
+        except FileNotFoundError:
+            print("Not a valid path")
+            return False
+        if not img_paths:
+            print("No images found")
+            return False
+        img_data = []
+        for img in img_paths:
+            img_data.append(Image.open(img))
+        try:
+            img_data[0].save(r"data/pdfs/converted.pdf", "PDF", resolution=100.0, save_all=True, append_images=img_data)
+        except AttributeError:
+            print("Error saving pdf")
+        else:
+            return True
 
 
 if __name__ == '__main__':
