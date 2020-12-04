@@ -1,6 +1,4 @@
 .idea/*
-data/images/*
-data/pdfs/*
 venv/*
 poppler-20.11.0/*
 __pycache__/*

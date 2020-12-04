@@ -1,6 +1,6 @@
+import sys
 from os import listdir
 from os.path import isfile, join, isdir
-import sys
 from requests import get
 from zipfile import ZipFile
 from tqdm import tqdm
@@ -18,7 +18,7 @@ def compress_images(og_imgs: list, params: dict):
         return False
     else:
         print("Saving images...")
-    if not os.path.isdir("data/images"):
+    if not isdir("data/images"):
         os.mkdir("data/images")
     for i in tqdm(range(len(og_imgs))):
         try:
@@ -85,7 +85,7 @@ class CNC:
             img_paths = [join(self.FILE_PATH, f) for f in listdir(self.FILE_PATH)
                          if
                          (isfile(join(self.FILE_PATH, f)) and (f.endswith(".png") or f.endswith(".jpg") or f.endswith(".jpeg")))]
-        except FileNotFoundError:
+        except [FileNotFoundError, OSError]:
             print("Not a valid path")
             return False
         if not img_paths:
