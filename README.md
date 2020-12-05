@@ -6,7 +6,7 @@
 
 ## Getting started
  - `pip install -r requirements.txt`
- - If poppler is not installed then it will be installed automatically(requires internet connection)
+ - If poppler is not installed then it will be installed automatically size-8.6MB(requires internet connection)
  - Run `python main.py`
  - Choose between two options and follow the instructions
  - And you have a pdf and image converter ready!
