@@ -1,3 +1,5 @@
 .idea/*
-data/images/*
+venv/*
+poppler-20.11.0/*
 __pycache__/*
+poppler.zip
